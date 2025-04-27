@@ -54,8 +54,13 @@ import (
 
 func main() {
  // Инициализация gRPC клиента
- grpcClient := grpcclient.NewGRPCClient(os.Getenv("GRPC_ADDRESS"))
- 
+//  grpcClient := grpcclient.NewGRPCClient(os.Getenv("GRPC_ADDRESS"))
+ grpcAddress := os.Getenv("GRPC_ADDRESS")
+ if grpcAddress == "" {
+        grpcAddress = "localhost:50051" // дефолт для локальной разработки
+    }
+ grpcClient := grpcclient.NewGRPCClient(grpcAddress)
+
  // Инициализация базы данных
  db, err := storage.NewStorage("calculator.db")
  if err != nil {
@@ -76,7 +81,7 @@ func main() {
  // Роуты для вычислений с защитой JWT
  api := r.PathPrefix("/api/v1").Subrouter()
  api.Use(middleware.JWTMiddleware(authService))
- api.HandleFunc("/calculate", calculator.CalculateHandler(calculatorService)).Methods("POST")
+ api.HandleFunc("/calculate", calculator.CalculateHandler(calculatorService, db)).Methods("POST")
 
  // Запуск HTTP-сервера
  log.Println("HTTP server started at :8080")
