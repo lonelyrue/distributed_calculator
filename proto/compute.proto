@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package proto;
+
+// Добавьте эту строку для указания правильного Go пакета
+option go_package = "/proto";
+
+// Здесь объявите ваше сообщение и сервис
+message CalculationRequest {
+    string expression = 1;
+}
+
+message CalculationResponse {
+    double result = 1;
+}
+
+service Calculator {
+    rpc Calculate (CalculationRequest) returns (CalculationResponse);
+}
