@@ -152,5 +152,6 @@ docker-compose down
 ```
 docker-compose logs -f calc_service
 ```
+```
 docker-compose logs -f compute_service---
-
+```
